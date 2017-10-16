@@ -25,10 +25,10 @@ extern "C" {
 	cGenericHapticDevicePtr hapticDevice;
 
 	// a virtual tool representing the haptic device in the scene
-	cToolCursor* tool;
+	cToolCursor* tool = nullptr;
 
 	// define the radius of the tool (sphere)
-	double toolRadius;
+	double toolRadius = 0.0;
 
 	// indicates if the haptic simulation currently running
 	bool simulationRunning = true;
@@ -41,6 +41,17 @@ extern "C" {
 
 	// get spec of haptic device
 	cHapticDeviceInfo hapticDeviceInfo;
+
+	bool setToolRadius(double radius) {
+		if (tool != nullptr) {
+			toolRadius = radius;
+			// define a radius for the tool
+			tool->setRadius(radius);
+			return true;
+		}
+		return false;
+	}
+
 
 	bool prepareHaptics(double hapticScale)
 	{
@@ -73,10 +84,14 @@ extern "C" {
 		tool->setHapticDevice(hapticDevice);
 
 		// define the radius of the tool (sphere)
-		toolRadius = 0.025;
+		if (toolRadius == 0.0) {
+			// define a radius for the tool
+			tool->setRadius(0.025);
+		}
+		else {
+			tool->setRadius(toolRadius);
+		}
 
-		// define a radius for the tool
-		tool->setRadius(toolRadius);
 
 		// enable if objects in the scene are going to rotate of translate
 		// or possibly collide against the tool. If the environment
