@@ -42,6 +42,16 @@ extern "C" {
 	// get spec of haptic device
 	cHapticDeviceInfo hapticDeviceInfo;
 
+	bool setToolRadius(double radius) {
+		if (tool != nullptr) {
+			toolRadius = radius;
+			// define a radius for the tool
+			tool->setRadius(radius);
+			return true;
+		}
+		return false;
+	}
+
 	bool prepareHaptics(double hapticScale)
 	{
 		//--------------------------------------------------------------------------
